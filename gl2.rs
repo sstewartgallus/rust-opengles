@@ -375,44 +375,38 @@ pub fn destroy<T>(_x: T) {
 
 // Exposed Rust API using Rust naming conventions
 
-#[fixed_stack_segment]
 pub fn active_texture(texture: GLenum) {
     unsafe {
         glActiveTexture(texture);
     }
 }
 
-#[fixed_stack_segment]
 pub fn attach_shader(program: GLuint, shader: GLuint) {
     unsafe {
         glAttachShader(program, shader);
     }
 }
 
-#[fixed_stack_segment]
 pub fn bind_attrib_location(program: GLuint, index: GLuint, name: &str) {
     unsafe {
-        do name.to_c_str().with_ref |cstr| {
-            glBindAttribLocation(program, index, cstr);
-        }
+        name.to_c_str().with_ref(|cstr| {
+                glBindAttribLocation(program, index, cstr);
+            })
     }
 }
 
-#[fixed_stack_segment]
 pub fn bind_buffer(target: GLenum, buffer: GLuint) {
     unsafe {
         glBindBuffer(target, buffer);
     }
 }
 
-#[fixed_stack_segment]
 pub fn bind_framebuffer(target: GLenum, framebuffer: GLuint) {
     unsafe {
         glBindFramebuffer(target, framebuffer);
     }
 }
 
-#[fixed_stack_segment]
 pub fn bind_texture(target: GLenum, texture: GLuint) {
     unsafe {
         glBindTexture(target, texture);
@@ -421,42 +415,36 @@ pub fn bind_texture(target: GLenum, texture: GLuint) {
 
 #[cfg(not(target_os="android"), not(target_os="macos"))]
 #[cfg(not(target_os="android"), not(mac_10_6))]
-#[fixed_stack_segment]
 pub fn bind_vertex_array(array: GLuint) {
     unsafe {
         glBindVertexArray(array);
     }
 }
 
-#[fixed_stack_segment]
 pub fn blend_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf) {
     unsafe {
         glBlendColor(red, green, blue, alpha);
     }
 }
 
-#[fixed_stack_segment]
 pub fn blend_equation(mode: GLenum) {
     unsafe {
         glBlendEquation(mode);
     }
 }
 
-#[fixed_stack_segment]
 pub fn blend_equation_separate(mode_rgb: GLenum, mode_alpha: GLenum) {
     unsafe {
         glBlendEquationSeparate(mode_rgb, mode_alpha);
     }
 }
 
-#[fixed_stack_segment]
 pub fn blend_func(sfactor: GLenum, dfactor: GLenum) {
     unsafe {
         glBlendFunc(sfactor, dfactor);
     }
 }
 
-#[fixed_stack_segment]
 pub fn blend_func_separate(src_rgb: GLenum, dst_rgb: GLenum, src_alpha: GLenum, dst_alpha: GLenum) {
     unsafe {
         glBlendFuncSeparate(src_rgb, dst_rgb, src_alpha, dst_alpha);
@@ -464,167 +452,146 @@ pub fn blend_func_separate(src_rgb: GLenum, dst_rgb: GLenum, src_alpha: GLenum, 
 }
 
 // FIXME: There should be some type-safe wrapper for this...
-#[fixed_stack_segment]
 pub fn buffer_data<T>(target: GLenum, data: &[T], usage: GLenum) {
     unsafe {
         glBufferData(target,
-                         (data.len() * size_of::<T>()) as GLsizeiptr,
-                         to_ptr(data) as *GLvoid,
-                         usage);
+                     (data.len() * size_of::<T>()) as GLsizeiptr,
+                     to_ptr(data) as *GLvoid,
+                     usage);
     }
 }
 
 // FIXME: As above
 // Note: offset is the element offset index, not byte offset
-#[fixed_stack_segment]
 pub fn buffer_sub_data<T>(target: GLenum, element_offset_index: uint, data: &[T]) {
     unsafe {
         let size = size_of::<T>();
         glBufferSubData(target,
-                            (element_offset_index * size) as GLintptr,
-                            (data.len() * size) as GLsizeiptr,
-                            to_ptr(data) as *GLvoid);
+                        (element_offset_index * size) as GLintptr,
+                        (data.len() * size) as GLsizeiptr,
+                        to_ptr(data) as *GLvoid);
     }
 }
 
-#[fixed_stack_segment]
 pub fn check_framebuffer_status(target: GLenum) -> GLenum {
     unsafe {
         glCheckFramebufferStatus(target)
     }
 }
 
-#[fixed_stack_segment]
 pub fn clear(mask: GLbitfield) {
     unsafe {
         glClear(mask);
     }
 }
 
-#[fixed_stack_segment]
 pub fn clear_color(red: GLclampf, green: GLclampf, blue: GLclampf, alpha: GLclampf) {
     unsafe {
         glClearColor(red, green, blue, alpha);
     }
 }
 
-#[fixed_stack_segment]
 pub fn compile_shader(shader: GLuint) {
     unsafe {
         glCompileShader(shader);
     }
 }
 
-#[fixed_stack_segment]
 pub fn create_program() -> GLuint {
     unsafe {
         return glCreateProgram();
     }
 }
 
-#[fixed_stack_segment]
 pub fn create_shader(shader_type: GLenum) -> GLuint {
     unsafe {
         return glCreateShader(shader_type);
     }
 }
 
-#[fixed_stack_segment]
 pub fn cull_face(mode: GLenum) {
     unsafe {
         glCullFace(mode);
     }
 }
 
-#[fixed_stack_segment]
 pub fn delete_buffers(buffers: &[GLuint]) {
     unsafe {
         glDeleteBuffers(buffers.len() as GLsizei, to_ptr(buffers));
     }
 }
 
-#[fixed_stack_segment]
 pub fn delete_frame_buffers(frame_buffers: &[GLuint]) {
     unsafe {
         glDeleteFramebuffers(frame_buffers.len() as GLsizei, to_ptr(frame_buffers));
     }
 }
 
-#[fixed_stack_segment]
 pub fn delete_program(program: GLuint) {
     unsafe {
         glDeleteProgram(program);
     }
 }
 
-#[fixed_stack_segment]
 pub fn delete_render_buffers(render_buffers: &[GLuint]) {
     unsafe {
         glDeleteRenderbuffers(render_buffers.len() as GLsizei, to_ptr(render_buffers));
     }
 }
 
-#[fixed_stack_segment]
 pub fn delete_shader(shader: GLuint) {
     unsafe {
         glDeleteShader(shader);
     }
 }
 
-#[fixed_stack_segment]
 pub fn delete_textures(textures: &[GLuint]) {
     unsafe {
         return glDeleteTextures(textures.len() as GLsizei, to_ptr(textures));
     }
 }
 
-#[fixed_stack_segment]
 pub fn depth_func(func: GLenum) {
     unsafe {
         glDepthFunc(func);
     }
 }
 
-#[fixed_stack_segment]
 pub fn depth_mask(flag: bool) {
     unsafe {
         glDepthMask(flag as GLboolean);
     }
 }
 
-#[fixed_stack_segment]
 pub fn detach_shader(program: GLuint, shader: GLuint) {
     unsafe {
         glDetachShader(program, shader);
     }
 }
 
-#[fixed_stack_segment]
 pub fn draw_arrays(mode: GLenum, first: GLint, count: GLsizei) {
     unsafe {
         return glDrawArrays(mode, first, count);
     }
 }
 
-#[fixed_stack_segment]
 pub fn draw_elements(mode: GLenum, count: GLsizei, element_type: GLenum, indices: Option<&[u8]>) {
     unsafe {
         return glDrawElements(mode,
-                                  match indices {
-                                    Some(ref i) => cmp::min(count, i.len() as GLsizei),
-                                    None => count,
-                                  },
-                                  element_type,
-                                  match indices {
-                                    Some(ref i) => cast::transmute(&i[0]),
-                                    None => ptr::null(),
-                                  })
+                              match indices {
+                Some(ref i) => cmp::min(count, i.len() as GLsizei),
+                None => count,
+            },
+                              element_type,
+                              match indices {
+                Some(ref i) => cast::transmute(&i[0]),
+                None => ptr::null(),
+            })
     }
 }
 
 #[cfg(not(target_os="android"), not(target_os="macos"))]
 #[cfg(not(target_os="android"), not(mac_10_6))]
-#[fixed_stack_segment]
 pub fn draw_arrays_instanced(mode: GLenum, first: GLint, count: GLsizei, primcount: GLsizei) {
     unsafe {
         glDrawArraysInstanced(mode, first, count, primcount);
@@ -633,66 +600,58 @@ pub fn draw_arrays_instanced(mode: GLenum, first: GLint, count: GLsizei, primcou
 
 #[cfg(not(target_os="android"), not(target_os="macos"))]
 #[cfg(not(target_os="android"), not(mac_10_6))]
-#[fixed_stack_segment]
 pub fn draw_elements_instanced(mode: GLenum, count: GLsizei, element_type: GLenum, indices: Option<&[u8]>, primcount: GLsizei) {
     unsafe {
         glDrawElementsInstanced(mode,
-                                    match indices {
-                                      Some(ref i) => cmp::min(count, i.len() as GLsizei),
-                                      None => count,
-                                    },
-                                    element_type,
-                                    match indices {
-                                      Some(ref i) => cast::transmute(&i[0]),
-                                      None => ptr::null(),
-                                    }, 
-                                    primcount);
+                                match indices {
+                Some(ref i) => cmp::min(count, i.len() as GLsizei),
+                None => count,
+            },
+                                element_type,
+                                match indices {
+                Some(ref i) => cast::transmute(&i[0]),
+                None => ptr::null(),
+            }, 
+                                primcount);
     }
 }
 
-#[fixed_stack_segment]
 pub fn enable(cap: GLenum) {
     unsafe {
         glEnable(cap);
     }
 }
 
-#[fixed_stack_segment]
 pub fn disable(cap: GLenum) {
     unsafe {
         glDisable(cap);
     }
 }
 
-#[fixed_stack_segment]
 pub fn enable_vertex_attrib_array(index: GLuint) {
     unsafe {
         glEnableVertexAttribArray(index);
     }
 }
 
-#[fixed_stack_segment]
 pub fn disable_vertex_attrib_array(index: GLuint) {
     unsafe {
         glDisableVertexAttribArray(index);
     }
 }
 
-#[fixed_stack_segment]
 pub fn finish() {
     unsafe {
         return glFinish();
     }
 }
 
-#[fixed_stack_segment]
 pub fn flush() {
     unsafe {
         return glFlush();
     }
 }
 
-#[fixed_stack_segment]
 pub fn framebuffer_texture_2d(target: GLenum,
                               attachment: GLenum,
                               textarget: GLenum,
@@ -703,14 +662,12 @@ pub fn framebuffer_texture_2d(target: GLenum,
     }
 }
 
-#[fixed_stack_segment]
 pub fn front_face(mode: GLenum) {
     unsafe {
         glFrontFace(mode);
     }
 }
 
-#[fixed_stack_segment]
 pub fn gen_buffers(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
@@ -719,7 +676,6 @@ pub fn gen_buffers(n: GLsizei) -> ~[GLuint] {
     }
 }
 
-#[fixed_stack_segment]
 pub fn gen_framebuffers(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
@@ -728,7 +684,6 @@ pub fn gen_framebuffers(n: GLsizei) -> ~[GLuint] {
     }
 }
 
-#[fixed_stack_segment]
 pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
@@ -739,7 +694,6 @@ pub fn gen_textures(n: GLsizei) -> ~[GLuint] {
 
 #[cfg(not(target_os="android"), not(target_os="macos"))]
 #[cfg(not(target_os="android"), not(mac_10_6))]
-#[fixed_stack_segment]
 pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
     unsafe {
         let result = from_elem(n as uint, 0 as GLuint);
@@ -748,44 +702,39 @@ pub fn gen_vertex_arrays(n: GLsizei) -> ~[GLuint] {
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_attrib_location(program: GLuint, name: &str) -> c_int {
     unsafe {
-        do name.to_c_str().with_ref |name_bytes| {
-            glGetAttribLocation(program, name_bytes as *GLchar)
-        }
+        name.to_c_str().with_ref(|name_bytes| {
+                glGetAttribLocation(program, name_bytes as *GLchar)
+            })
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_error() -> GLenum {
     unsafe {
         return glGetError();
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_integer_v(pname: GLenum, result: &mut [GLint]) {
     unsafe {
         glGetIntegerv(pname, to_unsafe_ptr(&result[0]));
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_program_info_log(program: GLuint) -> ~str {
     unsafe {
         let mut result = from_elem(1024u, 0u8);
         let result_len: GLsizei = 0 as GLsizei;
         glGetProgramInfoLog(program,
-                               1024 as GLsizei,
-                               to_unsafe_ptr(&result_len),
-                               to_ptr(result) as *GLchar);
+                            1024 as GLsizei,
+                            to_unsafe_ptr(&result_len),
+                            to_ptr(result) as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
         return from_utf8(result);
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint {
     unsafe {
         let result: GLint = 0 as GLint;
@@ -794,21 +743,19 @@ pub fn get_program_iv(program: GLuint, pname: GLenum) -> GLint {
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_shader_info_log(shader: GLuint) -> ~str {
     unsafe {
         let mut result = from_elem(1024u, 0u8);
         let result_len: GLsizei = 0 as GLsizei;
         glGetShaderInfoLog(shader,
-                               1024 as GLsizei,
-                               to_unsafe_ptr(&result_len),
-                               to_ptr(result) as *GLchar);
+                           1024 as GLsizei,
+                           to_unsafe_ptr(&result_len),
+                           to_ptr(result) as *GLchar);
         result.truncate(if result_len > 0 {result_len-1} else {0} as uint);
         return from_utf8(result);
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_string(which: GLenum) -> ~str {
     unsafe {
         let llstr = glGetString(which);
@@ -820,7 +767,6 @@ pub fn get_string(which: GLenum) -> ~str {
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
     unsafe {
         let result: GLint = 0 as GLint;
@@ -829,79 +775,68 @@ pub fn get_shader_iv(shader: GLuint, pname: GLenum) -> GLint {
     }
 }
 
-#[fixed_stack_segment]
 pub fn get_uniform_location(program: GLuint, name: &str) -> c_int {
     unsafe {
-        do name.to_c_str().with_ref |name_bytes| {
-            glGetUniformLocation(program, name_bytes as *GLchar)
-        }
+        name.to_c_str().with_ref(|name_bytes| {
+                glGetUniformLocation(program, name_bytes as *GLchar)
+            })
     }
 }
 
-#[fixed_stack_segment]
 pub fn is_buffer(buffer: GLuint) -> bool {
-  unsafe {
-    glIsBuffer(buffer) > 0
-  }
+    unsafe {
+        glIsBuffer(buffer) > 0
+    }
 }
 
-#[fixed_stack_segment]
 pub fn is_enabled(cap: GLenum) -> bool {
-  unsafe {
-    glIsEnabled(cap) > 0
-  }
+    unsafe {
+        glIsEnabled(cap) > 0
+    }
 }
 
-#[fixed_stack_segment]
 pub fn is_framebuffer(framebuffer: GLuint) -> bool {
-  unsafe {
-    glIsFramebuffer(framebuffer) > 0
-  }
+    unsafe {
+        glIsFramebuffer(framebuffer) > 0
+    }
 }
 
-#[fixed_stack_segment]
 pub fn is_program(program: GLuint) -> bool {
-  unsafe {
-    glIsProgram(program) > 0
-  }
+    unsafe {
+        glIsProgram(program) > 0
+    }
 }
 
-#[fixed_stack_segment]
 pub fn is_renderbuffer(renderbuffer: GLuint) -> bool {
-  unsafe {
-    glIsRenderbuffer(renderbuffer) > 0
-  }
+    unsafe {
+        glIsRenderbuffer(renderbuffer) > 0
+    }
 }
 
-#[fixed_stack_segment]
 pub fn is_shader(shader: GLuint) -> bool {
-  unsafe {
-    glIsShader(shader) > 0
-  }
+    unsafe {
+        glIsShader(shader) > 0
+    }
 }
 
-#[fixed_stack_segment]
 pub fn is_texture(texture: GLuint) -> bool {
-  unsafe {
-    glIsTexture(texture) > 0
-  }
+    unsafe {
+        glIsTexture(texture) > 0
+    }
 }
 
-#[fixed_stack_segment]
 pub fn line_width(width: GLfloat) {
-  unsafe {
-    glLineWidth(width);
-  }
+    unsafe {
+        glLineWidth(width);
+    }
 }
 
-#[fixed_stack_segment]
 pub fn link_program(program: GLuint) {
     unsafe {
         return glLinkProgram(program);
     }
 }
 
-#[fixed_stack_segment]
 pub fn pixel_store_i(pname: GLenum, param: GLint) {
     unsafe {
         glPixelStorei(pname, param);
@@ -909,14 +844,12 @@ pub fn pixel_store_i(pname: GLenum, param: GLint) {
 }
 
 #[cfg(not(target_os = "android"))]
-#[fixed_stack_segment]
 pub fn polygon_mode(face: GLenum, mode: GLenum) {
     unsafe {
         glPolygonMode(face, mode);
     }
 }
 
-#[fixed_stack_segment]
 pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: GLenum, pixel_type: GLenum) -> ~[u8] {
     let colors = match format {
         RGB => 3,
@@ -931,38 +864,35 @@ pub fn read_pixels(x: GLint, y: GLint, width: GLsizei, height: GLsizei, format: 
     let mut pixels: ~[u8] = ~[];
     pixels.reserve((width * height * colors * depth) as uint);
 
-    do pixels.as_mut_buf |buf, _| {
-        unsafe {
-            glReadPixels(x, y, width, height, format, pixel_type, cast::transmute(buf));
-        }
-    }
+    pixels.as_mut_buf(|buf, _| {
+            unsafe {
+                glReadPixels(x, y, width, height, format, pixel_type, cast::transmute(buf));
+            }
+        });
 
     unsafe { set_len(&mut pixels, (width * height * colors * depth) as uint); }
 
     pixels
 }
 
-#[fixed_stack_segment]
 pub fn scissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
     unsafe {
         glScissor(x, y, width, height);
     }
 }
 
-#[fixed_stack_segment]
 pub fn shader_source(shader: GLuint, strings: &[~[u8]]) {
     unsafe {
         let pointers = strings.map(|string| to_ptr(*string));
         let lengths = strings.map(|string| string.len() as GLint);
         glShaderSource(shader, pointers.len() as GLsizei,
-                           to_ptr(pointers) as **GLchar, to_ptr(lengths));
+                       to_ptr(pointers) as **GLchar, to_ptr(lengths));
         destroy(lengths);
         destroy(pointers);
     }
 }
 
 // FIXME: Does not verify buffer size -- unsafe!
-#[fixed_stack_segment]
 pub fn tex_image_2d(target: GLenum,
                     level: GLint,
                     internal_format: GLint,
@@ -977,20 +907,19 @@ pub fn tex_image_2d(target: GLenum,
             unsafe {
                 let pdata = transmute(to_ptr(data));
                 glTexImage2D(target, level, internal_format, width, height, border, format, ty,
-                                 pdata);
+                             pdata);
             }
         }
         None => {
             unsafe {
                 glTexImage2D(target, level, internal_format, width, height, border, format, ty,
-                                 ptr::null());
+                             ptr::null());
             }
         }
     }
 }
 
 // FIXME: Does not verify buffer size -- unsafe!
-#[fixed_stack_segment]
 pub fn tex_sub_image_2d(target: GLenum,
                         level: GLint,
                         xoffset: GLint,
@@ -1005,85 +934,75 @@ pub fn tex_sub_image_2d(target: GLenum,
             unsafe {
                 let pdata = transmute(to_ptr(data));
                 glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
-                                   pdata);
+                                pdata);
             }
         }
         None => {
             unsafe {
                 glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, ty,
-                                   ptr::null());
+                                ptr::null());
             }
         }
     }
 }
 
-#[fixed_stack_segment]
 pub fn tex_parameter_i(target: GLenum, pname: GLenum, param: GLint) {
     unsafe {
         glTexParameteri(target, pname, param);
     }
 }
 
-#[fixed_stack_segment]
 pub fn uniform_1f(location: GLint, x: GLfloat) {
     unsafe {
         glUniform1f(location, x);
     }
 }
 
-#[fixed_stack_segment]
 pub fn uniform_1i(location: GLint, x: GLint) {
     unsafe {
         glUniform1i(location, x);
     }
 }
 
-#[fixed_stack_segment]
 pub fn uniform_2f(location: GLint, x: GLfloat, y: GLfloat) {
     unsafe {
         glUniform2f(location, x, y);
     }
 }
 
-#[fixed_stack_segment]
 pub fn uniform_3f(location: GLint, x: GLfloat, y: GLfloat, z: GLfloat) {
     unsafe {
         glUniform3f(location, x, y, z);
     }
 }
 
-#[fixed_stack_segment]
 pub fn uniform_4f(location: GLint, x: GLfloat, y: GLfloat, z: GLfloat, w: GLfloat) {
     unsafe {
         glUniform4f(location, x, y, z, w);
     }
 }
 
-#[fixed_stack_segment]
 pub fn uniform_matrix_4fv(location: GLint, transpose: bool, value: &[f32]) {
     unsafe {
         glUniformMatrix4fv(location,
-                               1 as GLsizei,
-                               transpose as GLboolean,
-                               cast::transmute(&value[0]));
+                           1 as GLsizei,
+                           transpose as GLboolean,
+                           cast::transmute(&value[0]));
     }
 }
 
-#[fixed_stack_segment]
 pub fn use_program(program: GLuint) {
     unsafe {
         glUseProgram(program);
     }
 }
 
-#[fixed_stack_segment]
 pub fn validate_program(program: GLuint) {
     unsafe {
         glValidateProgram(program);
     }
 }
 
-#[fixed_stack_segment]
 pub fn vertex_attrib_pointer_f32(index: GLuint,
                                  size: GLint,
                                  normalized: bool,
@@ -1091,31 +1010,29 @@ pub fn vertex_attrib_pointer_f32(index: GLuint,
                                  offset: GLuint) {
     unsafe {
         glVertexAttribPointer(index,
-                                  size,
-                                  FLOAT,
-                                  normalized as GLboolean,
-                                  stride,
-                                  transmute(offset as uint));
+                              size,
+                              FLOAT,
+                              normalized as GLboolean,
+                              stride,
+                              transmute(offset as uint));
     }
 }
 
-#[fixed_stack_segment]
 pub fn vertex_attrib_pointer_i8(index: GLuint,
-                                 size: GLint,
-                                 normalized: bool,
-                                 stride: GLsizei,
-                                 offset: GLuint) {
+                                size: GLint,
+                                normalized: bool,
+                                stride: GLsizei,
+                                offset: GLuint) {
     unsafe {
         glVertexAttribPointer(index,
-                                  size,
-                                  BYTE,
-                                  normalized as GLboolean,
-                                  stride,
-                                  transmute(offset as uint));
+                              size,
+                              BYTE,
+                              normalized as GLboolean,
+                              stride,
+                              transmute(offset as uint));
     }
 }
 
-#[fixed_stack_segment]
 pub fn vertex_attrib_pointer_i32(index: GLuint,
                                  size: GLint,
                                  normalized: bool,
@@ -1123,20 +1040,19 @@ pub fn vertex_attrib_pointer_i32(index: GLuint,
                                  offset: GLuint) {
     unsafe {
         glVertexAttribPointer(index,
-                                  size,
-                                  INT,
-                                  normalized as GLboolean,
-                                  stride,
-                                  transmute(offset as uint));
+                              size,
+                              INT,
+                              normalized as GLboolean,
+                              stride,
+                              transmute(offset as uint));
     }
 }
 
-#[fixed_stack_segment]
 pub fn vertex_attrib_pointer_u8(index: GLuint,
-                                 size: GLint,
-                                 normalized: bool,
-                                 stride: GLsizei,
-                                 offset: GLuint) {
+                                size: GLint,
+                                normalized: bool,
+                                stride: GLsizei,
+                                offset: GLuint) {
     unsafe {
         glVertexAttribPointer(index,
                                   size,
@@ -1149,14 +1065,12 @@ pub fn vertex_attrib_pointer_u8(index: GLuint,
 
 #[cfg(not(target_os="android"), not(target_os="macos"))]
 #[cfg(not(target_os="android"), not(mac_10_6), not(mac_10_7))]
-#[fixed_stack_segment]
 pub fn vertex_attrib_divisor(index: GLuint, divisor: GLuint) {
     unsafe {
         glVertexAttribDivisor(index, divisor);
     }
 }
 
-#[fixed_stack_segment]
 pub fn viewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
     unsafe {
         glViewport(x, y, width, height);
@@ -1170,8 +1084,7 @@ pub mod apple {
     use std::cast::transmute;
     use std::vec::raw::to_ptr;
 
-    #[fixed_stack_segment]
-    pub unsafe fn texture_range(target: GLenum, buffer: &[u8]) {
+        pub unsafe fn texture_range(target: GLenum, buffer: &[u8]) {
         super::glTextureRangeAPPLE(target, buffer.len() as GLsizei, transmute(to_ptr(buffer)));
     }
 }
